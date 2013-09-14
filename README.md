@@ -6,6 +6,7 @@ Start by installing grunt and a few required tasks:
 ```console
 npm install -g grunt-cli
 npm install
+bower install
 ```
 
 Then, start watching for file changes using these commands:

@@ -16,11 +16,12 @@ module.exports = (grunt) ->
           paths:
             underscore: "empty:"
             jquery: "empty:"
+            tictail: "empty:"
             mustache: "empty:"
             text: "vendor/text"
             requireLib: "vendor/require"
           stubModules: ["text"]
-          include: ["requireLib","main"]
+          include: ["requireLib","app"]
           out: "dist/js/main-build.js"
 
     copy:
@@ -77,15 +78,17 @@ module.exports = (grunt) ->
           livereload: true
         files: ["html/**/*","vendor/**/*"]
         tasks: ["copy"]
-
+      
+      ###
       styles:
         options:
           atBegin: true
           spawn: false
           livereload: true
-        files: "sass/**/*.scss"
+        files: "sass/ * * / *.scss"
         tasks: ["compass"]
-
+      ###
+    
       templates:
         options:
           atBegin: true
@@ -120,7 +123,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-newer"
    
   # Make task shortcuts
-  grunt.registerTask "default", ["copy","bower-install","coffee:compile","compass","requirejs:compile"]
+  grunt.registerTask "default", ["copy","bower-install","coffee:compile","requirejs:compile"]
 
 
 
