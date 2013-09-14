@@ -18,9 +18,12 @@ requirejs.config
       deps: ["jquery","tictail"]
 
 define (require) ->
-  system  = require("tictail").native
-  api     = require("tictail").api
-  store   = null
+  system       = require("tictail").native
+  api          = require("tictail").api
+  listProducts = require("carousel_form")
+
+  store        = null
+
 
   system.init().done () ->
     api.get('v1/me').done start
@@ -30,7 +33,7 @@ define (require) ->
     store = data
     getProducts()
 
+
   getProducts = () ->
-    api.get("v1/stores/#{store.id}/products").done (data) ->
-      console.log arguments
-      
+    api.get("v1/stores/#{store.id}/products").done listProducts
+

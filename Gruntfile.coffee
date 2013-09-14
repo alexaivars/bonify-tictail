@@ -1,6 +1,6 @@
 "use strict"
 module.exports = (grunt) ->
-  
+
   # Configure Grunt
   grunt.initConfig
     pkg: grunt.file.readJSON("package.json")
@@ -43,18 +43,11 @@ module.exports = (grunt) ->
         dest: "dist/js"
         ext: ".js"
 
-    compass:
+    sass:
       dev:
-        options:
-          #basePath: "src/sass"
-          force: true
-          sassDir: "sass"
-          cssDir: "dist/css"
-          javascriptsDir: "dist/js"
-          imagesDir: "image"
-          raw: """output_style = :expanded
-                  Sass::Script::Number.precision = 10
-               """
+        files:
+          'dist/css/app.css': 'sass/main.scss'
+
     jasmine:
       all:
         options:
@@ -68,9 +61,9 @@ module.exports = (grunt) ->
                 # underscore: "empty:"
                 jquery: "vendor/jquery"
               deps: ['jquery']
-    
+
     watch:
-      
+
       static:
         options:
           atBegin: true
@@ -78,24 +71,20 @@ module.exports = (grunt) ->
           livereload: true
         files: ["html/**/*","vendor/**/*"]
         tasks: ["copy"]
-      
-      ###
+
       styles:
-        options:
-          atBegin: true
-          spawn: false
-          livereload: true
-        files: "sass/ * * / *.scss"
-        tasks: ["compass"]
-      ###
-    
+        # files to watch
+        files: ['sass/{,*/}*.sass','sass/{,*/}*.scss']
+        # task to run
+        tasks: ['sass:dev']
+
       templates:
         options:
           atBegin: true
           spawn: false
         files: "templates/**/*.tpl"
         tasks: ["copy:templates"]
-      
+
       libs:
         options:
           atBegin: true
@@ -112,24 +101,24 @@ module.exports = (grunt) ->
         tasks: ["newer:coffee"]
 
 
-  
+
   # Load external tasks
   grunt.loadNpmTasks "grunt-contrib-requirejs"
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-contrib-coffee"
   grunt.loadNpmTasks "grunt-contrib-copy"
-  grunt.loadNpmTasks "grunt-contrib-compass"
+  grunt.loadNpmTasks "grunt-contrib-sass"
   grunt.loadNpmTasks "grunt-contrib-jasmine"
   grunt.loadNpmTasks "grunt-newer"
-   
+
   # Make task shortcuts
-  grunt.registerTask "default", ["copy","bower-install","coffee:compile","requirejs:compile"]
+  grunt.registerTask "default", ["copy","bower-install","coffee:compile","requirejs:compile",'sass:dev']
 
 
 
   # -- Bower Tasks --------------------------------------------------------------
   grunt.registerTask 'bower-install', 'Installs Bower dependencies.', () ->
- 
+
     bower_json  = grunt.file.readJSON('bower.json')
     bower_dir   = 'bower_components'
     dist_dir    = 'dist/js/vendor'
@@ -146,6 +135,6 @@ module.exports = (grunt) ->
     copyMainFile = (name, src) ->
       grunt.log.ok("copied " + dist_dir + "/" + src.replace(/^[^/]+\//,""))
       grunt.file.copy bower_dir + "/" + name + "/" + src, dist_dir + "/" + src.replace(/^[^/]+\//,"")
-      
+
     grunt.util._.map bower_json.dependencies, (value, key) ->
       copyMainFile key, findMainFile(key)

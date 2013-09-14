@@ -1,14 +1,13 @@
-body {
-	background: red;
-}
+@import 'list.sass';
+
 
 
 #posts {
-	article {
-		padding: 1em;
-		background: white;
-	}
-	article + article {
-		margin-top: 1em;
-	}
+  article {
+    padding: 1em;
+    background: white;
+  }
+  article + article {
+    margin-top: 1em;
+  }
 }
