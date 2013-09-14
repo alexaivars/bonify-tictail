@@ -1,0 +1,14 @@
+body {
+	background: red;
+}
+
+
+#posts {
+	article {
+		padding: 1em;
+		background: white;
+	}
+	article + article {
+		margin-top: 1em;
+	}
+}
