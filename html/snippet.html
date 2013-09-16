@@ -1,0 +1,108 @@
+{{#list_page}}
+  <style>
+    .jnao_ic {
+      overflow: hidden;
+      visibility: hidden;
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .jnao_ic__list {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .jnao_ic__item {
+      float:left;
+      width:100%;
+      position: relative;
+    }
+    .jnao_ic__item a {
+      width: 100%;
+      max-height: 300px;
+      overflow: hidden;
+      display: block;
+    }
+    .jnao_ic__item img {
+      width: 100%;
+      margin-top: -25%;
+    }
+  </style>
+
+  <div id="jnao_ic" class="jnao_ic">
+    <ul class="jnao_ic__list">
+      {{#products}}<li class="jnao_ic__item">
+        <a href="{{url}}">
+          {{#primary_image}}
+          <img src="{{url-1000}}" alt="{{title}}">
+          {{/primary_image}}
+        </a>
+      </li>{{/products}}
+    </ul>
+  </div>
+
+  <script>
+    (function() {
+    var jnao_ic = {
+      'store_id': "{{store_identifier}}"
+    },
+
+    // Loads a script asynchronously and calls callback when finished
+    loadScript = function(id, src, callback) {
+      var js, d=document, elem = d.getElementsByTagName('script')[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement('script');
+      js.id = id;
+      js.async = true;
+      js.src = src;
+      if (typeof callback !== "undefined") {
+        js.onload = js.onreadystatechange = function() {
+          var rs = this.readyState;
+          if (rs && rs != 'complete' && rs != 'loaded') return;
+          try { callback(id, src); } catch (e) {}
+        };
+      }
+      elem.parentNode.insertBefore(js, elem);
+    },
+
+    initApp = function() {
+
+      jnao_ic.$('body').prepend($('#jnao_ic'));
+      jnao_ic.Swipe(document.getElementById('jnao_ic'),{
+        startSlide: 2,
+        speed: 1500,
+        auto: 5000,
+        continuous: true,
+        disableScroll: false,
+        stopPropagation: false,
+        callback: function(index, elem) {},
+        transitionEnd: function(index, elem) {}
+      })
+    },
+    checkSwipe = function () {
+      if (typeof(Swipe) === 'undefined') {
+        loadScript( 'jnao-ic-swipe', '//cdnjs.cloudflare.com/ajax/libs/swipe/2.0/swipe.min.js', function() {
+          jnao_ic.Swipe = Swipe;
+          initApp();
+        })
+      } else {
+        jnao_ic.Swipe = Swipe;
+        initApp();
+      }
+    };
+
+    jnao_ic.$ = jQuery;
+    // Load underscore if it's not already loaded
+    if (typeof(_) === "undefined") {
+      loadScript( 'jnao-ic-underscore', '//underscorejs.org/underscore-min.js', function() {
+        jnao_ic._ = _;
+        checkSwipe();
+      });
+    } else {
+      jnao_ic._ = _;
+      checkSwipe();
+    }
+    })();
+  </script>
+{{/list_page}}
